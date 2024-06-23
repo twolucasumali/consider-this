@@ -17,7 +17,7 @@ export default function ClientComponent({
 }) {
   const [started, setStarted] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [configId, setConfigId] = useState<string>('dabbd347-11ff-46a6-9a94-4117b1f7ccf9'); // Initial config ID
+  const [configId, setConfigId] = useState<string>('3bd57367-b634-417a-91b3-455559e3767d'); // Initial config ID
   const timeout = useRef<number | null>(null);
   const ref = useRef<ComponentRef<typeof Messages> | null>(null);
   const [client, setClient] = useState<HumeClient | null>(null);

@@ -81,7 +81,7 @@ export default function StartCall({ conversationId }: { conversationId: string }
                 </span>
                 <span><strong>Lesson 1:</strong> How is AI impacting people's livelihoods? </span>
               </Button>
-              <Button
+              {/* <Button
                 className={"z-50 mt-3 flex items-center gap-1.5"}
                 onClick={handleComingSoon}
               >
@@ -106,7 +106,7 @@ export default function StartCall({ conversationId }: { conversationId: string }
                   />
                 </span>
                 <span><strong>Lesson 3:</strong> On the Trolley Problem: To Pull or Not to Pull? </span>
-              </Button>
+              </Button> */}
             </motion.div>
           </AnimatePresence>
         </motion.div>

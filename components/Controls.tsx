@@ -45,9 +45,9 @@ const ChatStage: React.FC<ChatStageProps> = ({ conversationId, configId, setConf
       const returnString = await fetchConversationContextAndLastMessage(conversationId);
 
       // Change the config ID (example: switch to a different config ID)
-      const newConfigId = configId === 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9'
-        ? '44c49487-cd42-48af-bf68-94daf79185cd' // Replace with actual new config ID
-        : 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9';
+      const newConfigId = configId === '3bd57367-b634-417a-91b3-455559e3767d'
+        ? '4cab7bfc-7a00-4094-a2c2-f8ad3291984c' // Replace with actual new config ID
+        : '3bd57367-b634-417a-91b3-455559e3767d';
 
       setConfigId(newConfigId);
       setStarted(false); // Restart the conversation
