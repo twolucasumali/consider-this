@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import fetchConversationData from "@/utils/fetchConversationData";
 import { fetchConversationContextAndLastMessage, handleEndCall, updateLastMessage } from "@/utils/supabaseClient";
 import { HumeClient } from "hume";
+import { Profile } from "@/types/types";
 
 interface ChatStageProps {
   conversationId: string;
@@ -17,9 +18,11 @@ interface ChatStageProps {
   setConfigId: (configId: string) => void;
   setStarted: (started: boolean) => void;
   client: HumeClient | null;
+  charlesProfile: Profile | null;
+  melodyProfile: Profile | null;
 }
 
-const ChatStage: React.FC<ChatStageProps> = ({ conversationId, configId, setConfigId, setStarted, client }) => {
+const ChatStage: React.FC<ChatStageProps> = ({ conversationId, configId, setConfigId, setStarted, client, charlesProfile, melodyProfile }) => {
   const { connect, disconnect, status, isMuted, unmute, mute, micFft, lastVoiceMessage, sendAssistantInput } = useVoice();
   const [conversation, setConversation] = useState<any>({});
 
@@ -44,9 +47,9 @@ const ChatStage: React.FC<ChatStageProps> = ({ conversationId, configId, setConf
     const returnString = await fetchConversationContextAndLastMessage(conversationId);
 
     // Change the config ID (example: switch to a different config ID)
-    const newConfigId = configId === 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9'
-      ? '44c49487-cd42-48af-bf68-94daf79185cd' // Replace with actual new config ID
-      : 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9';
+    const newConfigId = (configId === melodyProfile?.id
+      ? charlesProfile?.id // Replace with actual new config ID
+      : melodyProfile?.id) ?? 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9';
 
     setConfigId(newConfigId);
     setStarted(false); // Restart the conversation

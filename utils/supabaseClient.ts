@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import fetchConversationData from './fetchConversationData';
 import formatConversation from './formatConversation';
+import { Profile } from '@/types/types';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
@@ -196,4 +197,33 @@ export const clearConversationContext = async (conversationId: string): Promise<
   if (error) {
     throw error;
   }
+};
+
+
+export const getProfileCharles = async (): Promise<Profile> => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('name', 'Charles')
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const getProfileMelody = async (): Promise<Profile> => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('name', 'Melody')
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 };

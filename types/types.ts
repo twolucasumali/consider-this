@@ -18,6 +18,14 @@ export interface InsertConversationPayload {
   participants: string[];
 }
 
+export interface Profile {
+  id: string;
+  config?: string;
+  name?: string;
+  created_at?: string;
+  image_paths?: string;
+}
+
 export interface Msg {
   type: string;
   message: {

@@ -8,9 +8,14 @@ import MessageLogger from "./MessageLogger";
 
 const Messages = forwardRef<
   ComponentRef<typeof motion.div>,
-  { conversationId: string }
->(function Messages({ conversationId }, ref) {
-  const { messages } = useVoice();
+  { conversationId: string; currentConfig: string }
+  >(function Messages({ conversationId, currentConfig }, ref) {
+    const { messages } = useVoice();
+
+  const formatUserMessageContent = (content: string) => {
+    const index = content.indexOf("{");
+    return index !== -1 ? content.substring(0, index) : content;
+  };
 
   return (
     <motion.div
@@ -27,6 +32,10 @@ const Messages = forwardRef<
               msg.type === "user_message" ||
               msg.type === "assistant_message"
             ) {
+              const content =
+                msg.type === "user_message"
+                  ? formatUserMessageContent(msg.message.content)
+                  : msg.message.content;
               
               return (
                 <motion.div
@@ -57,8 +66,8 @@ const Messages = forwardRef<
                   >
                     {msg.message.role}
                   </div>
-                  <div className={"pb-3 px-3"}>{msg.message.content}</div>
-                  <Expressions values={msg.models.prosody?.scores ?? {}} />
+                  <div className={"pb-3 px-3"}>{content}</div>
+                  {/* <Expressions values={msg.models.prosody?.scores ?? {}} /> */}
                   <MessageLogger role={msg.message.role} content={msg.message.content} attributes={msg.models.prosody?.scores ?? {}} conversationId={conversationId} messageIndex={index -2} />
                 </motion.div>
               );

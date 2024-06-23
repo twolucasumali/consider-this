@@ -9,8 +9,9 @@ import Messages from "./Messages";
 import Controls from "./Controls";
 import StartCall from "./StartCall";
 import { HumeClient } from "hume";
-import { ConversationData, fetchConversationContextAndLastMessage, insertNewConversation } from "@/utils/supabaseClient";
+import { ConversationData, fetchConversationContextAndLastMessage, getProfileCharles, getProfileMelody, insertNewConversation } from "@/utils/supabaseClient";
 import AgentComponent from "./Agent";
+import { Profile } from "@/types/types";
 
 const CONFIG_ONE = "5a0c849f-bf21-4f9d-97f0-958ff8619fba";
 const CONFIG_TWO = "dbe866f5-2bb7-44df-a73c-846feb59f4ec";
@@ -18,7 +19,7 @@ const CONFIG_TWO = "dbe866f5-2bb7-44df-a73c-846feb59f4ec";
 export default function ClientComponent({ accessToken }: { accessToken: string }) {
   const [started, setStarted] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [configId, setConfigId] = useState<string>('dabbd347-11ff-46a6-9a94-4117b1f7ccf9');
+  const [configId, setConfigId] = useState<string>(''); // Initial config ID
   const [client, setClient] = useState<HumeClient | null>(null);
   const [initialContext, setInitialContext] = useState<string | null>(null);
   const [currentConfig, setCurrentConfig] = useState(CONFIG_ONE);
@@ -31,6 +32,8 @@ export default function ClientComponent({ accessToken }: { accessToken: string }
   ]);
   const timeout = useRef<number | null>(null);
   const ref = useRef<ComponentRef<typeof Messages> | null>(null);
+  const [charlesProfile, setCharlesProfile] = useState<Profile | null>(null);
+  const [melodyProfile, setMelodyProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     if (configId && conversationId) {
@@ -41,6 +44,22 @@ export default function ClientComponent({ accessToken }: { accessToken: string }
       fetchData();
     }
   }, [configId, conversationId]);
+
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        const charlesData = await getProfileCharles();
+        const melodyData = await getProfileMelody();
+        setCharlesProfile(charlesData);
+        setMelodyProfile(melodyData);
+        setConfigId(melodyData.config || 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9'); // Set initial config to Charles' config or a default value
+      } catch (error) {
+        console.error('Error fetching profiles:', error);
+      }
+    };
+
+    fetchProfiles();
+  }, []);
 
   const handleStart = async () => {
     try {
@@ -149,6 +168,7 @@ export default function ClientComponent({ accessToken }: { accessToken: string }
           </div>
           {started && conversationId && initialContext && (
             <VoiceProvider
+              clearMessagesOnDisconnect={false}
               key={voiceProviderKey}
               sessionSettings={{ context: { text: initialContext, type: 'temporary' } }}
               configId={configId}
@@ -168,8 +188,8 @@ export default function ClientComponent({ accessToken }: { accessToken: string }
                 }, 200);
               }}
             >
-              <Messages ref={ref} conversationId={conversationId} />
-              <Controls conversationId={conversationId} configId={configId} setConfigId={setConfigId} setStarted={setStarted} client={client} />
+              <Messages ref={ref} conversationId={conversationId} currentConfig={currentConfig}/>
+              <Controls conversationId={conversationId} configId={configId} setConfigId={setConfigId} setStarted={setStarted} client={client} charlesProfile={charlesProfile} melodyProfile={melodyProfile}/>
               <StartCall />
             </VoiceProvider>
           )}
