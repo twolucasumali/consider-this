@@ -33,32 +33,36 @@ const ChatStage: React.FC<ChatStageProps> = ({ conversationId, configId, setConf
   }, [conversationId]);
 
   const handleSwitchPersona = async () => {
-    await handleEndCall(conversationId, disconnect);
+    try {
+      await handleEndCall(conversationId, disconnect);
 
-    // Update the last_message column with the lastVoiceMessage value
-    if (lastVoiceMessage) {
-      await updateLastMessage(conversationId, lastVoiceMessage.message.content);
+      // Update the last_message column with the lastVoiceMessage value
+      if (lastVoiceMessage) {
+        await updateLastMessage(conversationId, lastVoiceMessage.message.content);
+      }
+
+      // Fetch the conversation context and last message
+      const returnString = await fetchConversationContextAndLastMessage(conversationId);
+
+      // Change the config ID (example: switch to a different config ID)
+      const newConfigId = configId === 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9'
+        ? '44c49487-cd42-48af-bf68-94daf79185cd' // Replace with actual new config ID
+        : 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9';
+
+      setConfigId(newConfigId);
+      setStarted(false); // Restart the conversation
+
+      // Reconnect with the new config ID
+      // await client?.empathicVoice.chat.connect({
+      //   configId: newConfigId,
+      // });
+
+      setStarted(true); // Continue the conversation
+
+      sendAssistantInput(returnString);
+    } catch (error) {
+      console.error('Error switching persona:', error);
     }
-
-    // Fetch the conversation context and last message
-    const returnString = await fetchConversationContextAndLastMessage(conversationId);
-
-    // Change the config ID (example: switch to a different config ID)
-    const newConfigId = configId === 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9'
-      ? '44c49487-cd42-48af-bf68-94daf79185cd' // Replace with actual new config ID
-      : 'dabbd347-11ff-46a6-9a94-4117b1f7ccf9';
-
-    setConfigId(newConfigId);
-    setStarted(false); // Restart the conversation
-
-    // Reconnect with the new config ID
-    // await client?.empathicVoice.chat.connect({
-    //   configId: newConfigId,
-    // });
-
-    setStarted(true); // Continue the conversation
-
-    sendAssistantInput(returnString);
   };
 
   return (

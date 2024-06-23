@@ -2,12 +2,43 @@ import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { Bot, Smartphone, TrainTrack } from "lucide-react";
+import { useEffect, useState } from "react";
+import { fetchConversationContextAndLastMessage } from "@/utils/supabaseClient";
+import { stat } from "fs";
 
-export default function StartCall() {
+export default function StartCall({ conversationId }: { conversationId: string }) {
   const { status, connect } = useVoice();
+  const [firstMessageSent, setFirstMessageSent] = useState<boolean>(false); // Track if the first message has been sent
 
   const handleComingSoon = () => {
     alert("Coming soon!");
+  };
+
+  useEffect(() => {
+    const checkFirstMessageSent = async () => {
+      if (conversationId) {
+        const resultString = await fetchConversationContextAndLastMessage(conversationId);
+        setFirstMessageSent(resultString !== `{"conversationContext":null,"lastMessage":null}`); // Set to true if either has content
+        console.log("First message sent:", resultString);
+        console.log("firstMessageSent:", firstMessageSent);
+      }
+    };
+
+    checkFirstMessageSent();
+  }, [conversationId]);
+
+  useEffect(() => {
+    if (firstMessageSent && status.value !== "connected") {
+      console.log("First message already sent, connecting...");
+      connect()
+        .then(() => {})
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [firstMessageSent, status.value, connect]);
+
+  if (status.value !== "connected" && firstMessageSent) {
+    return null;
   }
 
   return (

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useRef, ComponentRef, useEffect } from "react";
-import { VoiceProvider } from "@humeai/voice-react";
+import { VoiceProvider, useVoice } from "@humeai/voice-react";
 import Messages from "./Messages";
 import Controls from "./Controls";
 import StartCall from "./StartCall";
 import { HumeClient } from "hume";
 import { ConversationData, addMessageToConversation, fetchConversationContextAndLastMessage, insertNewConversation } from "@/utils/supabaseClient";
 import logo from './logos/socratesLogo.png';
+import { set } from "remeda";
 
 export default function ClientComponent({
   accessToken,
@@ -21,6 +22,7 @@ export default function ClientComponent({
   const ref = useRef<ComponentRef<typeof Messages> | null>(null);
   const [client, setClient] = useState<HumeClient | null>(null);
   const [initialContext, setInitialContext] = useState<string | null>(null);
+  const [firstMessageSent, setFirstMessageSent] = useState<boolean>(false); // Track if the first message has been sent
 
   useEffect(() => {
     if (configId && conversationId) {
@@ -105,6 +107,7 @@ export default function ClientComponent({
       {
         started && conversationId && initialContext &&(
           <VoiceProvider
+            clearMessagesOnDisconnect={false}
             sessionSettings={{ context: { text: initialContext, type: 'temporary' } }}
             configId={configId}
             auth={{ type: "accessToken", value: accessToken }}
@@ -127,8 +130,8 @@ export default function ClientComponent({
           >
             <Messages ref={ref} conversationId={conversationId} />
             <Controls conversationId={conversationId} configId={configId} setConfigId={setConfigId} setStarted={setStarted} client={client} />
-            <StartCall />
-          </VoiceProvider>
+            <StartCall conversationId={conversationId}/>
+            </VoiceProvider>
         )
       }
     </div >
