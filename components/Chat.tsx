@@ -74,7 +74,7 @@ export default function ClientComponent({
             {/* Logo */}
             <img src={logo.src} alt="Logo" className="mx-auto mb-4" style={{ width: '125px', height: '125px' }} />
 
-            <h1 className="text-4xl font-semibold mb-4 leading-relaxed text-black">Lesson 1: AI </h1>
+            <h1 className="text-4xl font-semibold mb-4 leading-relaxed text-black">Consider This: </h1>
             {/* <CustomTypingEffect
               lines={[
                 "Facilitate open discussions and gain diverse viewpoints with our AI Socratic Seminar platform."

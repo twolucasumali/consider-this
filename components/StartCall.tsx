@@ -1,10 +1,14 @@
 import { useVoice } from "@humeai/voice-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { Phone } from "lucide-react";
+import { Bot, Smartphone, TrainTrack } from "lucide-react";
 
 export default function StartCall() {
   const { status, connect } = useVoice();
+
+  const handleComingSoon = () => {
+    alert("Coming soon!");
+  }
 
   return (
     <AnimatePresence>
@@ -38,13 +42,39 @@ export default function StartCall() {
                 }}
               >
                 <span>
-                  <Phone
+                  <Bot
                     className={"size-4 opacity-50"}
                     strokeWidth={2}
                     stroke={"currentColor"}
                   />
                 </span>
-                <span>Consider This:</span>
+                <span><strong>Lesson 1:</strong> How is AI impacting people's livelihoods? </span>
+              </Button>
+              <Button
+                className={"z-50 mt-3 flex items-center gap-1.5"}
+                onClick={handleComingSoon}
+              >
+                <span>
+                  <Smartphone
+                    className={"size-4 opacity-50"}
+                    strokeWidth={2}
+                    stroke={"currentColor"}
+                  />
+                </span>
+                <span><strong>Lesson 2:</strong> How does social media influence people's worldview? </span>
+              </Button>
+              <Button
+                className={"z-50 mt-3 flex items-center gap-1.5"}
+                onClick={handleComingSoon}
+              >
+                <span>
+                  <TrainTrack
+                    className={"size-4 opacity-50"}
+                    strokeWidth={2}
+                    stroke={"currentColor"}
+                  />
+                </span>
+                <span><strong>Lesson 3:</strong> On the Trolley Problem: To Pull or Not to Pull? </span>
               </Button>
             </motion.div>
           </AnimatePresence>

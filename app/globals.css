@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-body {
+/* body {
   font-family: 'Press Start 2P', cursive;
   cursor: url('/lightningCursor.cur'), auto;
-}
+} */
 
 .pixelate {
   image-rendering: pixelated;
@@ -12,10 +12,6 @@ body {
 
 button {
   font-family: 'Press Start 2P', cursive;
-}
-
-button:hover {
-  cursor: url('/lightningCursor.cur'), auto; /* Ensures cursor remains as lightning bolt on hover */
 }
 
 h1, h2, h3, h4, h5, h6, p, div {
