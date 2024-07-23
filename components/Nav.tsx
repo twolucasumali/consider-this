@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import Logo from "./logos/socratesLogo.png";
 
 export const Nav = () => {
@@ -22,8 +23,10 @@ export const Nav = () => {
         }
       >
         <div className="absolute left-4 flex items-center gap-2">
-          <img src={Logo.src} alt="Logo" style={{ width: '40px', height: '40px' }} />
-          <span className="text-lg font-bold text-[#6C3F18]">Consider This</span>
+          <Link href="/" className="flex items-center gap-2">
+            <img src={Logo.src} alt="Logo" style={{ width: '40px', height: '40px' }} />
+            <span className="text-lg font-bold text-[#6C3F18]">Consider This</span>
+          </Link>
         </div>
         <div className="w-full text-center">
           <h1
