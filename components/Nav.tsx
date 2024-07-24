@@ -1,15 +1,19 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
-
+import { useEffect } from "react";
+import Link from "next/link";
 import Logo from "./logos/socratesLogo.png";
 
-import { Button } from "./ui/button";
-import { Moon, Sun } from "lucide-react";
-import Github from "./logos/GitHub";
-import pkg from '@/package.json';
-
 export const Nav = () => {
+  useEffect(() => {
+    // Add the overflow-hidden class to the body when the Nav component is mounted
+    document.body.classList.add('overflow-hidden');
+
+    // Remove the overflow-hidden class from the body when the Nav component is unmounted
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, []);
 
   return (
     <>
@@ -19,8 +23,10 @@ export const Nav = () => {
         }
       >
         <div className="absolute left-4 flex items-center gap-2">
-          <img src={Logo.src} alt="Logo" style={{ width: '40px', height: '40px' }} />
-          <span className="text-lg font-bold text-[#6C3F18]">Consider This</span>
+          <Link href="/" className="flex items-center gap-2">
+            <img src={Logo.src} alt="Logo" style={{ width: '40px', height: '40px' }} />
+            <span className="text-lg font-bold text-[#6C3F18]">Consider This</span>
+          </Link>
         </div>
         <div className="w-full text-center">
           <h1
@@ -32,6 +38,5 @@ export const Nav = () => {
         </div>
       </div>
     </>
-
   );
 };

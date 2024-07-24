@@ -1,4 +1,8 @@
+// Componenet used to display the messages and the top three expressions detected from Hume AI to client
+
 "use client";
+
+// Import utilities and components for conditional class names, voice hooks, and animations
 import { cn } from "@/utils";
 import { useVoice } from "@humeai/voice-react";
 import Expressions from "./Expressions";
@@ -6,10 +10,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ComponentRef, forwardRef } from "react";
 import MessageLogger from "./MessageLogger";
 
+// Define the Messages component using forwardRef to pass refs to the underlying motion.div
 const Messages = forwardRef<
   ComponentRef<typeof motion.div>,
   { conversationId: string }
 >(function Messages({ conversationId }, ref) {
+  // Get the list of messages from the useVoice hook
   const { messages } = useVoice();
 
   return (
